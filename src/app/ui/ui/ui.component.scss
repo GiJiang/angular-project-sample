@@ -1,0 +1,14 @@
+.ui-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+// .d-flex {
+//   height: 100%;
+// }
+
+.ui-content {
+  flex-grow: 1;
+}
+
+
