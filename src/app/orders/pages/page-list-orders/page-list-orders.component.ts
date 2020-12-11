@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { StateOrder } from 'src/app/core/enums/state-order.enum';
 import { Order } from 'src/app/core/models/order';
 import { OrdersService } from 'src/app/core/services/orders.service';
 
@@ -14,9 +15,9 @@ export class PageListOrdersComponent implements OnInit {
   //public collectionOrders!: Order[];
   public collection$!: Observable<Order[]>;
   //private sub!: Subscription;
-  constructor(private ordersService: OrdersService)
+  public states: any;
+  constructor(private ordersService: OrdersService, private changeDetectorRef: ChangeDetectorRef)
   {
-
     this.initPage();
   }
 
@@ -30,6 +31,7 @@ export class PageListOrdersComponent implements OnInit {
       'Total TTC',
       'State'
     ]
+    this.states = Object.values(StateOrder);
     this.collection$ = this.ordersService.collection;
     //this.sub =
     /*this.ordersService.collection.subscribe((orders: Order[]) => {
@@ -42,5 +44,13 @@ export class PageListOrdersComponent implements OnInit {
 
   ngOnDestroy() {
     //this.sub.unsubscribe();
+  }
+
+  changeState(item: any, $event: any): void {
+    const state = $event.target.value;
+    this.ordersService.changeState(item, state).subscribe((order: Order) => {
+      item.state = order.state;
+      this.changeDetectorRef.detectChanges();
+    });
   }
 }
